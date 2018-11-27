@@ -1,0 +1,18 @@
+version: '3.3'
+
+services:
+  neuroglancer:
+    build: .
+    network_mode: "host"
+#    ports:
+#       - "8080:8080"
+    environment:
+       - NODE_PATH $NVM_DIR/v$NODE_VERSION/lib/node_modules
+       - PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
+    command:
+      - bash 
+      - -c
+      - npm run dev-server 
+    restart: always
+
+

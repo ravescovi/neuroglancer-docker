@@ -1,0 +1,29 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yml
+    kompose.version: 1.17.0 (a74acad)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: neuroglancer
+  name: neuroglancer
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: neuroglancer
+    spec:
+      containers:
+      - args:
+        - bash
+        - -c
+        - npm run dev-server
+        image: neuroglancer
+        name: neuroglancer
+        resources: {}
+      restartPolicy: Always
+status: {}
