@@ -1,16 +1,29 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
   annotations:
-    kompose.cmd: kompose convert -f docker-compose.yml
-    kompose.version: 1.17.0 (a74acad)
-  creationTimestamp: null
+    deployment.kubernetes.io/revision: "2"
+  creationTimestamp: 2018-11-28T22:13:06Z
+  generation: 2
   labels:
     io.kompose.service: neuroglancer
   name: neuroglancer
+  namespace: connectomics-esp-unrestricted
+  resourceVersion: "71435548"
+  selfLink: /apis/apps/v1beta2/namespaces/connectomics-esp-unrestricted/deployments/neuroglancer
+  uid: c823110b-f35a-11e8-81d8-6cae8b3f396a
 spec:
+  progressDeadlineSeconds: 600
   replicas: 1
-  strategy: {}
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      io.kompose.service: neuroglancer
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
   template:
     metadata:
       creationTimestamp: null
@@ -19,11 +32,35 @@ spec:
     spec:
       containers:
       - args:
-        - bash
-        - -c
-        - npm run dev-server
-        image: neuroglancer
+        - bash -c npm run dev-server
+        image: ravescovi/neuroglancer
+        imagePullPolicy: Always
         name: neuroglancer
         resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
       restartPolicy: Always
-status: {}
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+status:
+  collisionCount: 1
+  conditions:
+  - lastTransitionTime: 2018-11-28T22:13:06Z
+    lastUpdateTime: 2018-11-28T22:13:06Z
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  - lastTransitionTime: 2018-11-28T22:13:06Z
+    lastUpdateTime: 2018-11-28T22:38:51Z
+    message: ReplicaSet "neuroglancer-89b8449f8" is progressing.
+    reason: ReplicaSetUpdated
+    status: "True"
+    type: Progressing
+  observedGeneration: 2
+  replicas: 1
+  unavailableReplicas: 1
+  updatedReplicas: 1
+
