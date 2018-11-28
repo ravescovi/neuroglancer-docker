@@ -1,11 +1,6 @@
 FROM nvidia/cuda:9.0-devel-ubuntu16.04
 
 
-
-
-ARG python=2.7
-ENV PYTHON_VERSION=${python}
-
 RUN apt-get update && apt-get install -y --no-install-recommends --allow-downgrades --allow-change-held-packages \
         build-essential \
         cmake \
@@ -14,21 +9,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends --allow-downgra
         vim \
         wget \
         ca-certificates \
-        python${PYTHON_VERSION} \
-        python${PYTHON_VERSION}-dev \
+        python \
+        python-dev \
+        python-pip \
         && apt-get clean \
         && rm -rf /var/lib/apt/lists/*
 
 
-RUN ln -s /usr/bin/python${PYTHON_VERSION} /usr/bin/python
-
-RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
-    python get-pip.py && \
-    rm get-pip.py
-
-
 RUN pip install setuptools wheel numpy
-
 
 
 ENV NVM_DIR /usr/local/nvm
@@ -46,9 +34,6 @@ RUN curl https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | 
 ENV NODE_PATH $NVM_DIR/v$NODE_VERSION/lib/node_modules
 ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
 
-# confirm installation
-RUN node -v
-RUN npm -v
 
 # install neuroglancer
 RUN git clone https://github.com/google/neuroglancer.git
