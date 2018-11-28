@@ -1,5 +1,4 @@
-FROM nvidia/cuda:9.0-devel-ubuntu16.04
-
+FROM ubuntu:latest
 
 RUN apt-get update && apt-get install -y --no-install-recommends --allow-downgrades --allow-change-held-packages \
         build-essential \
@@ -14,7 +13,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends --allow-downgra
         python-pip \
         && apt-get clean \
         && rm -rf /var/lib/apt/lists/*
-
 
 RUN pip install setuptools wheel numpy
 
